@@ -153,10 +153,21 @@ ol {
 
 .botton-list {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 25px;
+  justify-content: center;
+  gap: 32px;
 }
-.item {
-  max-width: 80px;
+
+.link {
+  display: block;
+  padding: 8px 16px;
+  border: 1px solid;
+  border-radius: 8px;
+  transition: 200ms ease-in;
+}
+.link:hover,
+.link:focus {
+  transform: scale(1.06);
+  color: #747bff;
 }
