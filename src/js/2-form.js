@@ -4,46 +4,51 @@ const refs = {
   form: document.querySelector('.feedback-form'),
 };
 
-refs.form.addEventListener('input', e => {
-  const email = e.currentTarget.elements.email.value;
-  const message = e.currentTarget.elements.message.value;
-  const data = { email, message };
-  saveToLS(STORAGE_KEY, data);
-});
-
-// ============================================================
+let formData = {
+  email: '',
+  message: '',
+};
 
 function initPage() {
-  const formData = loadFromLS(STORAGE_KEY);
-  refs.form.elements.email.value = formData?.email || 'k03.chesak@gmail.com';
-  refs.form.elements.message.value = formData?.message || '';
+  const savedData = loadFromLS(STORAGE_KEY);
+  if (savedData) {
+    formData = savedData;
+    refs.form.elements.email.value = formData.email || '';
+    refs.form.elements.message.value = formData.message || '';
+  }
 }
 
 initPage();
 
-// ============================================================
+refs.form.addEventListener('input', e => {
+  formData[e.target.name] = e.target.value.trim();
+  saveToLS(STORAGE_KEY, formData);
+});
 
 refs.form.addEventListener('submit', e => {
   e.preventDefault();
-  const email = e.currentTarget.elements.email.value;
-  const message = e.currentTarget.elements.message.value;
-  const data = { email, message };
-  console.log(data);
+
+  const { email, message } = formData;
+  if (!email || !message) {
+    alert('Fill please all fields');
+    return;
+  }
+
+  console.log(formData);
   localStorage.removeItem(STORAGE_KEY);
+  formData = { email: '', message: '' };
   e.target.reset();
 });
 
 function saveToLS(key, value) {
-  const jsonData = JSON.stringify(value);
-  localStorage.setItem(key, jsonData);
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
 function loadFromLS(key) {
-  const body = localStorage.getItem(key);
+  const data = localStorage.getItem(key);
   try {
-    const data = JSON.parse(body);
-    return data;
+    return data ? JSON.parse(data) : null;
   } catch {
-    return body;
+    return null;
   }
 }
