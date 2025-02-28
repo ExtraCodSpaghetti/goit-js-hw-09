@@ -150,3 +150,13 @@ ol {
 .feedback-form button:focus {
   background-color: #6c8cff;
 }
+
+.botton-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+.item {
+  max-width: 80px;
+}
